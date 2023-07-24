@@ -37,9 +37,9 @@ exports.create = (req, res) => {
       });
     }
 
-    if (!req.body.nama) {
+    if (!req.body.nama || !req.file) {
       return res.status(400).send({
-        message: "Content can not be empty!",
+        message: "Nama dan gambar harus diisi.",
         code: 400,
         data: null,
       });
@@ -55,7 +55,7 @@ exports.create = (req, res) => {
     Project.create(project)
       .then((data) => {
         res.status(200).send({
-          message: "Add project Successfully",
+          message: "Add project successfully",
           code: 200,
           data: data,
         });
