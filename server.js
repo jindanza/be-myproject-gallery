@@ -6,13 +6,21 @@ const app = express();
 
 const db = require("./models");
 // db.sequelize.sync()
+(async () => {
+  try {
+    await db.sequelize.sync();
+    console.log("Database berhasil di-synchronize.");
+  } catch (error) {
+    console.error("Terjadi kesalahan:", error);
+  }
+})();
 
 // db.sequelize.sync({ force: true }).then(() => {
 //     console.log("Drop and re-sync db.")
 // })
 
 var corsOptions = {
-  origin: "http://localhost:8081",
+  origin: "*",
 };
 
 app.use(cors(corsOptions));
@@ -27,6 +35,7 @@ app.get("/", (req, res) => {
 
 require("./routes/user.route.js")(app);
 require("./routes/auth.route.js")(app);
+require("./routes/project.route.js")(app);
 
 const PORT = process.env.PORT || 8080;
 

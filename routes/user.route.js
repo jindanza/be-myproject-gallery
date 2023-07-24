@@ -1,7 +1,7 @@
 const { verifyToken } = require("../middleware/auth");
 
 module.exports = (app) => {
-  const user = require("../controllers/user.controller.js");
+  const user = require("../controllers/user.controller");
 
   let router = require("express").Router();
 
@@ -9,19 +9,19 @@ module.exports = (app) => {
   router.post("/", user.create);
 
   // findAll
-  router.get("/", user.findAll);
+  router.get("/", verifyToken, user.findAll);
 
   // findone
-  router.get("/:id", user.findOne);
+  router.get("/:id", verifyToken, user.findOne);
 
   // update
-  router.put("/:id", user.update);
+  router.put("/:id", verifyToken, user.update);
 
   // delete by id
-  router.delete("/:id", user.delete);
+  router.delete("/:id", verifyToken, user.delete);
 
   // delete all
-  router.delete("/", user.deleteAll);
+  router.delete("/", verifyToken, user.deleteAll);
 
-  app.use("/users", router);
+  app.use("/api/users", router);
 };
