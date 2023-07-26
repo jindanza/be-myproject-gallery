@@ -6,11 +6,9 @@ const multer = require("multer");
 // Konfigurasi multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // Tentukan folder tempat menyimpan file gambar
     cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    // Tentukan nama file gambar yang disimpan (bisa disesuaikan dengan kebutuhan)
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
@@ -37,9 +35,9 @@ exports.create = (req, res) => {
       });
     }
 
-    if (!req.body.nama || !req.file) {
+    if (!req.body.nama || !req.file || !req.body.deskripsi || !req.body.waktu_pengerjaan) {
       return res.status(400).send({
-        message: "Nama dan gambar harus diisi.",
+        message: "seluruh data harus diisi, tidak boleh kosong",
         code: 400,
         data: null,
       });
@@ -49,7 +47,7 @@ exports.create = (req, res) => {
       nama: req.body.nama,
       deskripsi: req.body.deskripsi,
       waktu_pengerjaan: req.body.waktu_pengerjaan,
-      gambar: req.file.path, // Path file gambar yang telah diupload oleh multer
+      gambar: req.file.path,
     };
 
     Project.create(project)
@@ -75,7 +73,6 @@ exports.create = (req, res) => {
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  // Middleware untuk menghandle upload gambar (jika ada)
   upload.single("gambar")(req, res, function (err) {
     if (err instanceof multer.MulterError) {
       // Error dari multer
@@ -93,19 +90,16 @@ exports.update = (req, res) => {
       });
     }
 
-    // Ambil data proyek yang ingin diupdate dari req.body
     const project = {
       nama: req.body.nama,
       deskripsi: req.body.deskripsi,
       waktu_pengerjaan: req.body.waktu_pengerjaan,
     };
 
-    // Jika ada file gambar yang diunggah, tambahkan path gambar ke dalam data proyek
     if (req.file) {
       project.gambar = req.file.path;
     }
 
-    // Lakukan proses update
     Project.update(project, {
       where: { id: id },
     })
