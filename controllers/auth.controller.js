@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 exports.login = (req, res) => {
   if (!req.body.username || !req.body.password) {
-    res.status(400).send({
+    return res.status(400).send({
       message: "Content can not be empty!",
     });
   }
@@ -22,7 +22,7 @@ exports.login = (req, res) => {
   })
     .then((user) => {
       if (!user) {
-        res.status(404).send({
+        return res.status(404).send({
           message: "Failed to login!",
           code: 404,
           data: null,
@@ -33,7 +33,7 @@ exports.login = (req, res) => {
         user.password
       );
       if (!isPasswordValid) {
-        res.status(401).send({
+        return res.status(401).send({
           message: "Failed to login!",
           code: 401,
           data: null,

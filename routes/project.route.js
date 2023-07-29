@@ -6,22 +6,22 @@ module.exports = (app) => {
   let router = require("express").Router();
 
   // create
-  router.post("/", project.create);
+  router.post("/", verifyToken, project.create);
 
   // findAll
-  router.get("/", project.findAll);
+  router.get("/", verifyToken, project.findAll);
 
   // findone
-  router.get("/:id", project.findOne);
+  router.get("/:id", verifyToken, project.findOne);
 
   // update
-  router.put("/:id", project.update);
+  router.put("/:id", verifyToken, project.update);
 
   // delete by id
-  router.delete("/:id", project.delete);
+  router.delete("/:id", verifyToken, project.delete);
 
   // delete all
-  router.delete("/", project.deleteAll);
+  router.delete("/", verifyToken, project.deleteAll);
 
   app.use("/api/projects", router);
 };
