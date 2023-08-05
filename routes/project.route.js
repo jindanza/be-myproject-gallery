@@ -9,10 +9,10 @@ module.exports = (app) => {
   router.post("/", verifyToken, project.create);
 
   // findAll
-  router.get("/", verifyToken, project.findAll);
+  router.get("/", project.findAll);
 
   // findone
-  router.get("/:id", verifyToken, project.findOne);
+  router.get("/:id", project.findOne);
 
   // update
   router.put("/:id", verifyToken, project.update);
